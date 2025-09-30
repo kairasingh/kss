@@ -26,7 +26,7 @@
       padding: 20px 60px;
       margin: 20px auto;
       border-radius: 50px;
-      background: #ff99bb;
+      background: #ff99bb; /* starting color */
       color: white;
       font-size: 2.5rem;
       font-weight: bold;
@@ -132,7 +132,9 @@
   <section id="about">
     <h2>About Me</h2>
     <img src="profile.jpg" alt="Your profile picture">
-    <p>Hello! I’m [Your Name]. Welcome to my personal website. I love [your hobbies, interests, or career goals].</p>
+    <p id="about-text" contenteditable="true">
+      Hello! I’m [Your Name]. Welcome to my personal website. I love [your hobbies, interests, or career goals].
+    </p>
   </section>
 
   <section id="projects">
@@ -167,7 +169,8 @@
   <script>
     // 🌈 Rainbow oval name click effect
     const nameOval = document.getElementById('name-oval');
-    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3"];
+    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3","#ff99bb"]; 
+    // added pink as final reset
     let colorIndex = 0;
 
     nameOval.addEventListener("click", () => {
@@ -180,10 +183,19 @@
       localStorage.setItem("savedName", nameOval.innerText);
     });
 
-    // Load saved name
+    // 💾 Save About Me changes
+    const aboutText = document.getElementById('about-text');
+    aboutText.addEventListener("input", () => {
+      localStorage.setItem("savedAbout", aboutText.innerText);
+    });
+
+    // 📥 Load saved data
     window.addEventListener("load", () => {
       const savedName = localStorage.getItem("savedName");
       if (savedName) nameOval.innerText = savedName;
+
+      const savedAbout = localStorage.getItem("savedAbout");
+      if (savedAbout) aboutText.innerText = savedAbout;
 
       const savedBoard = localStorage.getItem("bulletinBoard");
       if (savedBoard) {
@@ -256,3 +268,4 @@
   </script>
 </body>
 </html>
+
