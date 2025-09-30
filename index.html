@@ -33,10 +33,7 @@
       transition: background 0.5s ease;
     }
 
-    header {
-      padding: 2rem;
-    }
-
+    header { padding: 2rem; }
     nav a {
       margin: 0 15px;
       color: white;
@@ -52,22 +49,9 @@
       transform: scale(1.1);
     }
 
-    section {
-      padding: 2rem;
-      animation: fadeIn 2s ease-in;
-    }
-
-    footer {
-      background: #ff99bb;
-      padding: 1rem;
-      color: white;
-    }
-
-    img {
-      border-radius: 10px;
-      max-width: 100%;
-      margin: 10px 0;
-    }
+    section { padding: 2rem; animation: fadeIn 2s ease-in; }
+    footer { background: #ff99bb; padding: 1rem; color: white; }
+    img { border-radius: 10px; max-width: 100%; margin: 10px 0; }
 
     /* 📌 Bulletin Board Styles */
     #board {
@@ -80,10 +64,7 @@
       max-width: 600px;
       min-height: 200px;
     }
-    #board h3 {
-      margin-top: 0;
-      color: #ff6699;
-    }
+    #board h3 { margin-top: 0; color: #ff6699; }
     #taskInput {
       padding: 10px;
       width: 50%;
@@ -112,9 +93,7 @@
       border-radius: 10px;
       text-align: left;
     }
-    #imgUpload {
-      display: none;
-    }
+    #imgUpload { display: none; }
 
     /* 🎮 Floating game button */
     #gameBtn {
@@ -133,10 +112,7 @@
       transition: transform 0.2s ease, background 0.3s ease;
       z-index: 1000;
     }
-    #gameBtn:hover {
-      transform: scale(1.1);
-      background: #ff6699;
-    }
+    #gameBtn:hover { transform: scale(1.1); background: #ff6699; }
 
     /* 🎮 Games popup */
     #gamesPopup {
@@ -148,17 +124,15 @@
       background: #fff3f7;
       border: 3px solid #ff99bb;
       border-radius: 20px;
-      width: 80%;
-      max-width: 600px;
-      height: 70%;
+      width: 85%;
+      max-width: 700px;
+      height: 75%;
       overflow-y: auto;
       padding: 20px;
       z-index: 2000;
       box-shadow: 0px 6px 15px rgba(0,0,0,0.3);
     }
-    #gamesPopup h2 {
-      color: #ff6699;
-    }
+    #gamesPopup h2 { color: #ff6699; }
     #closePopup {
       position: absolute;
       top: 10px;
@@ -169,8 +143,6 @@
       border: none;
       background: none;
     }
-
-    /* Game previews */
     .gameCard {
       background: #ffe6ef;
       margin: 15px 0;
@@ -178,10 +150,21 @@
       border-radius: 15px;
       transition: transform 0.2s ease;
     }
-    .gameCard:hover {
-      transform: scale(1.05);
+    .gameCard:hover { transform: scale(1.05); cursor: pointer; }
+
+    /* 🎮 Game containers */
+    .gameArea { display: none; margin-top: 20px; }
+    canvas { border: 2px solid #ff99bb; border-radius: 15px; background: white; }
+    .btnRow button {
+      margin: 5px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 10px;
+      background: #ff99bb;
+      color: white;
       cursor: pointer;
     }
+    .btnRow button:hover { background: #ff6699; }
   </style>
 </head>
 <body>
@@ -240,127 +223,22 @@
     <button id="closePopup">✖</button>
     <h2>Mini Games Corner 🎀</h2>
 
-    <div class="gameCard" onclick="alert('Slime Maker game coming soon!')">
-      🧃 Slime Maker – Mix colors, glitter, and stretch slime!
+    <div class="gameCard" onclick="showGame('slimeGame')">🧃 Slime Maker</div>
+    <div class="gameCard" onclick="showGame('dogGame')">🐶 Dog Designer</div>
+
+    <!-- 🧃 Slime Game -->
+    <div id="slimeGame" class="gameArea">
+      <h3>Slime Maker 🧃</h3>
+      <div class="btnRow">
+        <button onclick="setSlimeColor('pink')">Pink</button>
+        <button onclick="setSlimeColor('blue')">Blue</button>
+        <button onclick="setSlimeColor('green')">Green</button>
+        <button onclick="toggleGlitter()">✨ Toggle Glitter</button>
+      </div>
+      <canvas id="slimeCanvas" width="400" height="300"></canvas>
     </div>
 
-    <div class="gameCard" onclick="alert('Dog Designer game coming soon!')">
-      🐶 Dog Designer – Choose fur color, add cute outfits & bows!
-    </div>
-
-    <div class="gameCard" onclick="alert('More games will be added here!')">
-      ✨ More Cute Games Coming Soon!
-    </div>
-  </div>
-
-  <script>
-    // 🌈 Rainbow oval cycle
-    const nameOval = document.getElementById('name-oval');
-    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3","#ff99bb"];
-    let colorIndex = 0;
-
-    nameOval.addEventListener("click", () => {
-      nameOval.style.background = colors[colorIndex];
-      colorIndex = (colorIndex + 1) % colors.length;
-    });
-
-    // Save editable name
-    nameOval.addEventListener("input", () => {
-      localStorage.setItem("savedName", nameOval.innerText);
-    });
-
-    // Save About Me
-    const aboutText = document.getElementById('about-text');
-    aboutText.addEventListener("input", () => {
-      localStorage.setItem("savedAbout", aboutText.innerText);
-    });
-
-    // Load saved content
-    window.addEventListener("load", () => {
-      const savedName = localStorage.getItem("savedName");
-      if (savedName) nameOval.innerText = savedName;
-
-      const savedAbout = localStorage.getItem("savedAbout");
-      if (savedAbout) aboutText.innerText = savedAbout;
-
-      const savedBoard = localStorage.getItem("bulletinBoard");
-      if (savedBoard) {
-        tasks.innerHTML = savedBoard;
-        Array.from(tasks.children).forEach(makeDeletable);
-      }
-    });
-
-    // 📌 Bulletin board logic
-    const addBtn = document.getElementById('addBtn');
-    const taskInput = document.getElementById('taskInput');
-    const tasks = document.getElementById('tasks');
-    const imgUpload = document.getElementById('imgUpload');
-
-    function saveBoard() {
-      localStorage.setItem("bulletinBoard", tasks.innerHTML);
-    }
-
-    function makeDeletable(el) {
-      let holdTimer;
-
-      el.addEventListener("mousedown", () => {
-        holdTimer = setTimeout(() => {
-          el.remove();
-          saveBoard();
-        }, 5000);
-      });
-
-      el.addEventListener("mouseup", () => clearTimeout(holdTimer));
-      el.addEventListener("mouseleave", () => clearTimeout(holdTimer));
-
-      el.addEventListener("touchstart", () => {
-        holdTimer = setTimeout(() => {
-          el.remove();
-          saveBoard();
-        }, 5000);
-      });
-      el.addEventListener("touchend", () => clearTimeout(holdTimer));
-    }
-
-    addBtn.addEventListener('click', () => {
-      if (taskInput.value.trim() !== "") {
-        const div = document.createElement('div');
-        div.className = 'task';
-        div.textContent = taskInput.value;
-        makeDeletable(div);
-        tasks.appendChild(div);
-        taskInput.value = "";
-        saveBoard();
-      }
-    });
-
-    imgUpload.addEventListener("change", () => {
-      const file = imgUpload.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          makeDeletable(img);
-          tasks.appendChild(img);
-          saveBoard();
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // 🎮 Games popup logic
-    const gameBtn = document.getElementById("gameBtn");
-    const gamesPopup = document.getElementById("gamesPopup");
-    const closePopup = document.getElementById("closePopup");
-
-    gameBtn.addEventListener("click", () => {
-      gamesPopup.style.display = "block";
-    });
-
-    closePopup.addEventListener("click", () => {
-      gamesPopup.style.display = "none";
-    });
-  </script>
-</body>
-</html>
+    <!-- 🐶 Dog Designer -->
+    <div id="dogGame" class="gameArea">
+      <h3>Dog Designer 🐶</h3>
+      <div class="btnRow">
