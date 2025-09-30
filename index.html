@@ -65,9 +65,9 @@
     }
 
     img {
-      border-radius: 50%;
-      width: 150px;
-      margin: 20px 0;
+      border-radius: 10px;
+      max-width: 100%;
+      margin: 10px 0;
     }
 
     /* Bulletin Board Styles */
@@ -87,12 +87,12 @@
     }
     #taskInput {
       padding: 10px;
-      width: 60%;
+      width: 50%;
       border-radius: 10px;
       border: 2px solid #ff99bb;
       margin-right: 10px;
     }
-    #addBtn {
+    #addBtn, #imgUploadLabel {
       padding: 10px 15px;
       border: none;
       border-radius: 10px;
@@ -102,7 +102,7 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
     }
-    #addBtn:hover {
+    #addBtn:hover, #imgUploadLabel:hover {
       background-color: #ff6699;
       transform: scale(1.1);
     }
@@ -113,11 +113,14 @@
       border-radius: 10px;
       text-align: left;
     }
+    #imgUpload {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div id="name-oval">Hi, I’m [Your Name]!</div>
+    <div id="name-oval" contenteditable="true">Hi, I’m [Your Name]!</div>
     <nav>
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
@@ -145,7 +148,9 @@
   <section id="board">
     <h3>📌 My Bulletin Board</h3>
     <input type="text" id="taskInput" placeholder="Add a task or note...">
-    <button id="addBtn">Add</button>
+    <button id="addBtn">Add Task</button>
+    <label for="imgUpload" id="imgUploadLabel">Add Picture</label>
+    <input type="file" id="imgUpload" accept="image/*">
     <div id="tasks"></div>
   </section>
 
@@ -160,27 +165,92 @@
   </footer>
 
   <script>
-    // Rainbow oval name click effect
+    // 🌈 Rainbow oval name click effect
     const nameOval = document.getElementById('name-oval');
     const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3"];
     let colorIndex = 0;
+
     nameOval.addEventListener("click", () => {
       nameOval.style.background = colors[colorIndex];
       colorIndex = (colorIndex + 1) % colors.length;
     });
 
-    // Bulletin board tasks
+    // 💾 Save name changes to localStorage
+    nameOval.addEventListener("input", () => {
+      localStorage.setItem("savedName", nameOval.innerText);
+    });
+
+    // Load saved name
+    window.addEventListener("load", () => {
+      const savedName = localStorage.getItem("savedName");
+      if (savedName) nameOval.innerText = savedName;
+
+      const savedBoard = localStorage.getItem("bulletinBoard");
+      if (savedBoard) {
+        tasks.innerHTML = savedBoard;
+        Array.from(tasks.children).forEach(makeDeletable);
+      }
+    });
+
+    // 📌 Bulletin board
     const addBtn = document.getElementById('addBtn');
     const taskInput = document.getElementById('taskInput');
     const tasks = document.getElementById('tasks');
+    const imgUpload = document.getElementById('imgUpload');
 
+    function saveBoard() {
+      localStorage.setItem("bulletinBoard", tasks.innerHTML);
+    }
+
+    function makeDeletable(el) {
+      let holdTimer;
+
+      el.addEventListener("mousedown", () => {
+        holdTimer = setTimeout(() => {
+          el.remove();
+          saveBoard();
+        }, 5000);
+      });
+
+      el.addEventListener("mouseup", () => clearTimeout(holdTimer));
+      el.addEventListener("mouseleave", () => clearTimeout(holdTimer));
+
+      // Touch support
+      el.addEventListener("touchstart", () => {
+        holdTimer = setTimeout(() => {
+          el.remove();
+          saveBoard();
+        }, 5000);
+      });
+      el.addEventListener("touchend", () => clearTimeout(holdTimer));
+    }
+
+    // Add task
     addBtn.addEventListener('click', () => {
       if (taskInput.value.trim() !== "") {
         const div = document.createElement('div');
         div.className = 'task';
         div.textContent = taskInput.value;
+        makeDeletable(div);
         tasks.appendChild(div);
         taskInput.value = "";
+        saveBoard();
+      }
+    });
+
+    // Add picture
+    imgUpload.addEventListener("change", () => {
+      const file = imgUpload.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          makeDeletable(img);
+          tasks.appendChild(img);
+          saveBoard();
+        };
+        reader.readAsDataURL(file);
       }
     });
   </script>
