@@ -6,7 +6,7 @@
   <title>My Personal Website</title>
   <style>
     body {
-      background-color: #ffccdc; /* light pink */
+      background-color: #ffccdc;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
@@ -14,258 +14,115 @@
       animation: fadeIn 2s ease-in;
     }
 
-    /* Fade-in animation */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
 
-    /* Oval rainbow name header */
-    #name-oval {
-      display: inline-block;
-      padding: 20px 60px;
-      margin: 20px auto;
-      border-radius: 50px;
-      background: #ff99bb; /* starting color */
-      color: white;
-      font-size: 2.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.5s ease;
-    }
-
-    header {
-      padding: 2rem;
-    }
-
-    nav a {
-      margin: 0 15px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 20px;
-      background-color: #ff99bb;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    nav a:hover {
-      background-color: #ff6699;
-      transform: scale(1.1);
-    }
-
-    section {
-      padding: 2rem;
-      animation: fadeIn 2s ease-in;
-    }
-
-    footer {
+    /* 🎮 Floating game button */
+    #gameBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
       background: #ff99bb;
-      padding: 1rem;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-size: 2rem;
+      cursor: pointer;
       color: white;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, background 0.3s ease;
+      z-index: 1000;
+    }
+    #gameBtn:hover {
+      transform: scale(1.1);
+      background: #ff6699;
     }
 
-    img {
-      border-radius: 10px;
-      max-width: 100%;
-      margin: 10px 0;
-    }
-
-    /* Bulletin Board Styles */
-    #board {
+    /* 🎮 Games popup */
+    #gamesPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background: #fff3f7;
-      border: 3px dashed #ff6699;
+      border: 3px solid #ff99bb;
       border-radius: 20px;
-      padding: 20px;
-      margin: 2rem auto;
       width: 80%;
       max-width: 600px;
-      min-height: 200px;
+      height: 70%;
+      overflow-y: auto;
+      padding: 20px;
+      z-index: 2000;
+      box-shadow: 0px 6px 15px rgba(0,0,0,0.3);
     }
-    #board h3 {
-      margin-top: 0;
+    #gamesPopup h2 {
       color: #ff6699;
     }
-    #taskInput {
-      padding: 10px;
-      width: 50%;
-      border-radius: 10px;
-      border: 2px solid #ff99bb;
-      margin-right: 10px;
-    }
-    #addBtn, #imgUploadLabel {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 10px;
-      background-color: #ff99bb;
-      color: white;
-      font-weight: bold;
+    #closePopup {
+      position: absolute;
+      top: 10px;
+      right: 20px;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+      font-size: 1.5rem;
+      color: #ff6699;
+      border: none;
+      background: none;
     }
-    #addBtn:hover, #imgUploadLabel:hover {
-      background-color: #ff6699;
-      transform: scale(1.1);
-    }
-    .task {
+
+    /* Game previews */
+    .gameCard {
       background: #ffe6ef;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: left;
+      margin: 15px 0;
+      padding: 15px;
+      border-radius: 15px;
+      transition: transform 0.2s ease;
     }
-    #imgUpload {
-      display: none;
+    .gameCard:hover {
+      transform: scale(1.05);
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <header>
-    <div id="name-oval" contenteditable="true">Hi, I’m [Your Name]!</div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-      <a href="#board">Bulletin Board</a>
-    </nav>
-  </header>
+  <!-- Existing website content here (header, sections, etc.) -->
 
-  <section id="about">
-    <h2>About Me</h2>
-    <img src="profile.jpg" alt="Your profile picture">
-    <p id="about-text" contenteditable="true">
-      Hello! I’m [Your Name]. Welcome to my personal website. I love [your hobbies, interests, or career goals].
-    </p>
-  </section>
+  <!-- 🎮 Floating Button -->
+  <button id="gameBtn">🎮</button>
 
-  <section id="projects">
-    <h2>My Projects</h2>
-    <ul>
-      <li>✨ Project 1 – A short description.</li>
-      <li>🌸 Project 2 – A short description.</li>
-      <li>🚀 Project 3 – A short description.</li>
-    </ul>
-  </section>
+  <!-- 🎮 Games Popup -->
+  <div id="gamesPopup">
+    <button id="closePopup">✖</button>
+    <h2>Mini Games Corner 🎀</h2>
 
-  <!-- Bulletin Board Section -->
-  <section id="board">
-    <h3>📌 My Bulletin Board</h3>
-    <input type="text" id="taskInput" placeholder="Add a task or note...">
-    <button id="addBtn">Add Task</button>
-    <label for="imgUpload" id="imgUploadLabel">Add Picture</label>
-    <input type="file" id="imgUpload" accept="image/*">
-    <div id="tasks"></div>
-  </section>
+    <div class="gameCard" onclick="alert('Slime Maker game coming soon!')">
+      🧃 Slime Maker – Mix colors, glitter, and stretch slime!
+    </div>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>📧 Email: <a href="mailto:your@email.com">your@email.com</a></p>
-    <p>🔗 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
-  </section>
+    <div class="gameCard" onclick="alert('Dog Designer game coming soon!')">
+      🐶 Dog Designer – Choose fur color, add cute outfits & bows!
+    </div>
 
-  <footer>
-    <p>© 2025 [Your Name] | Made with 💖</p>
-  </footer>
+    <div class="gameCard" onclick="alert('More games will be added here!')">
+      ✨ More Cute Games Coming Soon!
+    </div>
+  </div>
 
   <script>
-    // 🌈 Rainbow oval name click effect
-    const nameOval = document.getElementById('name-oval');
-    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3","#ff99bb"]; 
-    // added pink as final reset
-    let colorIndex = 0;
+    const gameBtn = document.getElementById("gameBtn");
+    const gamesPopup = document.getElementById("gamesPopup");
+    const closePopup = document.getElementById("closePopup");
 
-    nameOval.addEventListener("click", () => {
-      nameOval.style.background = colors[colorIndex];
-      colorIndex = (colorIndex + 1) % colors.length;
+    gameBtn.addEventListener("click", () => {
+      gamesPopup.style.display = "block";
     });
 
-    // 💾 Save name changes to localStorage
-    nameOval.addEventListener("input", () => {
-      localStorage.setItem("savedName", nameOval.innerText);
-    });
-
-    // 💾 Save About Me changes
-    const aboutText = document.getElementById('about-text');
-    aboutText.addEventListener("input", () => {
-      localStorage.setItem("savedAbout", aboutText.innerText);
-    });
-
-    // 📥 Load saved data
-    window.addEventListener("load", () => {
-      const savedName = localStorage.getItem("savedName");
-      if (savedName) nameOval.innerText = savedName;
-
-      const savedAbout = localStorage.getItem("savedAbout");
-      if (savedAbout) aboutText.innerText = savedAbout;
-
-      const savedBoard = localStorage.getItem("bulletinBoard");
-      if (savedBoard) {
-        tasks.innerHTML = savedBoard;
-        Array.from(tasks.children).forEach(makeDeletable);
-      }
-    });
-
-    // 📌 Bulletin board
-    const addBtn = document.getElementById('addBtn');
-    const taskInput = document.getElementById('taskInput');
-    const tasks = document.getElementById('tasks');
-    const imgUpload = document.getElementById('imgUpload');
-
-    function saveBoard() {
-      localStorage.setItem("bulletinBoard", tasks.innerHTML);
-    }
-
-    function makeDeletable(el) {
-      let holdTimer;
-
-      el.addEventListener("mousedown", () => {
-        holdTimer = setTimeout(() => {
-          el.remove();
-          saveBoard();
-        }, 5000);
-      });
-
-      el.addEventListener("mouseup", () => clearTimeout(holdTimer));
-      el.addEventListener("mouseleave", () => clearTimeout(holdTimer));
-
-      // Touch support
-      el.addEventListener("touchstart", () => {
-        holdTimer = setTimeout(() => {
-          el.remove();
-          saveBoard();
-        }, 5000);
-      });
-      el.addEventListener("touchend", () => clearTimeout(holdTimer));
-    }
-
-    // Add task
-    addBtn.addEventListener('click', () => {
-      if (taskInput.value.trim() !== "") {
-        const div = document.createElement('div');
-        div.className = 'task';
-        div.textContent = taskInput.value;
-        makeDeletable(div);
-        tasks.appendChild(div);
-        taskInput.value = "";
-        saveBoard();
-      }
-    });
-
-    // Add picture
-    imgUpload.addEventListener("change", () => {
-      const file = imgUpload.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          makeDeletable(img);
-          tasks.appendChild(img);
-          saveBoard();
-        };
-        reader.readAsDataURL(file);
-      }
+    closePopup.addEventListener("click", () => {
+      gamesPopup.style.display = "none";
     });
   </script>
 </body>
 </html>
-
