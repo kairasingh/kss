@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Personal Website</title>
+  <title>Kaira's Personal Website</title>
   <style>
     body {
-      background-color: #ffccdc;
+      background: linear-gradient(#ffd6e8, #ffccdc);
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
@@ -50,8 +50,22 @@
     }
 
     section { padding: 2rem; animation: fadeIn 2s ease-in; }
+
     footer { background: #ff99bb; padding: 1rem; color: white; }
+
     img { border-radius: 10px; max-width: 100%; margin: 10px 0; }
+
+    /* 🎀 Whiteboard effect */
+    #whiteboard {
+      background: #fff;
+      border: 5px solid #ff99bb;
+      border-radius: 25px;
+      box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
+      margin: 2rem auto;
+      padding: 2rem;
+      width: 85%;
+      max-width: 900px;
+    }
 
     /* 📌 Bulletin Board Styles */
     #board {
@@ -94,82 +108,11 @@
       text-align: left;
     }
     #imgUpload { display: none; }
-
-    /* 🎮 Floating game button */
-    #gameBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ff99bb;
-      border: none;
-      border-radius: 50%;
-      width: 70px;
-      height: 70px;
-      font-size: 2rem;
-      cursor: pointer;
-      color: white;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-      transition: transform 0.2s ease, background 0.3s ease;
-      z-index: 1000;
-    }
-    #gameBtn:hover { transform: scale(1.1); background: #ff6699; }
-
-    /* 🎮 Games popup */
-    #gamesPopup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff3f7;
-      border: 3px solid #ff99bb;
-      border-radius: 20px;
-      width: 85%;
-      max-width: 700px;
-      height: 75%;
-      overflow-y: auto;
-      padding: 20px;
-      z-index: 2000;
-      box-shadow: 0px 6px 15px rgba(0,0,0,0.3);
-    }
-    #gamesPopup h2 { color: #ff6699; }
-    #closePopup {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 1.5rem;
-      color: #ff6699;
-      border: none;
-      background: none;
-    }
-    .gameCard {
-      background: #ffe6ef;
-      margin: 15px 0;
-      padding: 15px;
-      border-radius: 15px;
-      transition: transform 0.2s ease;
-    }
-    .gameCard:hover { transform: scale(1.05); cursor: pointer; }
-
-    /* 🎮 Game containers */
-    .gameArea { display: none; margin-top: 20px; }
-    canvas { border: 2px solid #ff99bb; border-radius: 15px; background: white; }
-    .btnRow button {
-      margin: 5px;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 10px;
-      background: #ff99bb;
-      color: white;
-      cursor: pointer;
-    }
-    .btnRow button:hover { background: #ff6699; }
   </style>
 </head>
 <body>
   <header>
-    <div id="name-oval" contenteditable="true">Hi, I’m [Your Name]!</div>
+    <div id="name-oval" contenteditable="true">Hi, I’m Kaira!</div>
     <nav>
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
@@ -178,67 +121,125 @@
     </nav>
   </header>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <img src="profile.jpg" alt="Your profile picture">
-    <p id="about-text" contenteditable="true">
-      Hello! I’m [Your Name]. Welcome to my personal website. I love [your hobbies, interests, or career goals].
-    </p>
-  </section>
+  <!-- 🎀 Whiteboard Content Area -->
+  <div id="whiteboard">
+    <section id="about">
+      <h2>About Me</h2>
+      <img src="profile.jpg" alt="Kaira's profile picture">
+      <p id="about-text" contenteditable="true">
+        Hello! I’m Kaira. Welcome to my personal website. I love [your hobbies, interests, or career goals].
+      </p>
+    </section>
 
-  <section id="projects">
-    <h2>My Projects</h2>
-    <ul>
-      <li>✨ Project 1 – A short description.</li>
-      <li>🌸 Project 2 – A short description.</li>
-      <li>🚀 Project 3 – A short description.</li>
-    </ul>
-  </section>
+    <section id="projects">
+      <h2>My Projects</h2>
+      <ul>
+        <li>✨ Project 1 – A short description.</li>
+        <li>🌸 Project 2 – A short description.</li>
+        <li>🚀 Project 3 – A short description.</li>
+      </ul>
+    </section>
 
-  <!-- 📌 Bulletin Board -->
-  <section id="board">
-    <h3>📌 My Bulletin Board</h3>
-    <input type="text" id="taskInput" placeholder="Add a task or note...">
-    <button id="addBtn">Add Task</button>
-    <label for="imgUpload" id="imgUploadLabel">Add Picture</label>
-    <input type="file" id="imgUpload" accept="image/*">
-    <div id="tasks"></div>
-  </section>
+    <!-- 📌 Bulletin Board -->
+    <section id="board">
+      <h3>📌 My Bulletin Board</h3>
+      <input type="text" id="taskInput" placeholder="Add a task or note...">
+      <button id="addBtn">Add Task</button>
+      <label for="imgUpload" id="imgUploadLabel">Add Picture</label>
+      <input type="file" id="imgUpload" accept="image/*">
+      <div id="tasks"></div>
+    </section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>📧 Email: <a href="mailto:your@email.com">your@email.com</a></p>
-    <p>🔗 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
-  </section>
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>📧 Email: <a href="mailto:your@email.com">your@email.com</a></p>
+      <p>🔗 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
+    </section>
+  </div>
 
   <footer>
-    <p>© 2025 [Your Name] | Made with 💖</p>
+    <p>© 2025 Kaira | Made with 💖</p>
   </footer>
 
-  <!-- 🎮 Floating Button -->
-  <button id="gameBtn">🎮</button>
+  <script>
+    // 🌈 Rainbow name cycle
+    const nameOval = document.getElementById('name-oval');
+    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3","#ff99bb"];
+    let colorIndex = 0;
+    nameOval.addEventListener("click", () => {
+      nameOval.style.background = colors[colorIndex];
+      colorIndex = (colorIndex + 1) % colors.length;
+    });
+    nameOval.addEventListener("input", () => {
+      localStorage.setItem("savedName", nameOval.innerText);
+    });
 
-  <!-- 🎮 Games Popup -->
-  <div id="gamesPopup">
-    <button id="closePopup">✖</button>
-    <h2>Mini Games Corner 🎀</h2>
+    // Save About text
+    const aboutText = document.getElementById('about-text');
+    aboutText.addEventListener("input", () => {
+      localStorage.setItem("savedAbout", aboutText.innerText);
+    });
 
-    <div class="gameCard" onclick="showGame('slimeGame')">🧃 Slime Maker</div>
-    <div class="gameCard" onclick="showGame('dogGame')">🐶 Dog Designer</div>
+    // Load saved content
+    window.addEventListener("load", () => {
+      const savedName = localStorage.getItem("savedName");
+      if (savedName) nameOval.innerText = savedName;
+      const savedAbout = localStorage.getItem("savedAbout");
+      if (savedAbout) aboutText.innerText = savedAbout;
+      const savedBoard = localStorage.getItem("bulletinBoard");
+      if (savedBoard) {
+        tasks.innerHTML = savedBoard;
+        Array.from(tasks.children).forEach(makeDeletable);
+      }
+    });
 
-    <!-- 🧃 Slime Game -->
-    <div id="slimeGame" class="gameArea">
-      <h3>Slime Maker 🧃</h3>
-      <div class="btnRow">
-        <button onclick="setSlimeColor('pink')">Pink</button>
-        <button onclick="setSlimeColor('blue')">Blue</button>
-        <button onclick="setSlimeColor('green')">Green</button>
-        <button onclick="toggleGlitter()">✨ Toggle Glitter</button>
-      </div>
-      <canvas id="slimeCanvas" width="400" height="300"></canvas>
-    </div>
+    // 📌 Bulletin board
+    const addBtn = document.getElementById('addBtn');
+    const taskInput = document.getElementById('taskInput');
+    const tasks = document.getElementById('tasks');
+    const imgUpload = document.getElementById('imgUpload');
 
-    <!-- 🐶 Dog Designer -->
-    <div id="dogGame" class="gameArea">
-      <h3>Dog Designer 🐶</h3>
-      <div class="btnRow">
+    function saveBoard() { localStorage.setItem("bulletinBoard", tasks.innerHTML); }
+
+    function makeDeletable(el) {
+      let holdTimer;
+      el.addEventListener("mousedown", () => {
+        holdTimer = setTimeout(() => { el.remove(); saveBoard(); }, 5000);
+      });
+      el.addEventListener("mouseup", () => clearTimeout(holdTimer));
+      el.addEventListener("mouseleave", () => clearTimeout(holdTimer));
+      el.addEventListener("touchstart", () => {
+        holdTimer = setTimeout(() => { el.remove(); saveBoard(); }, 5000);
+      });
+      el.addEventListener("touchend", () => clearTimeout(holdTimer));
+    }
+
+    addBtn.addEventListener('click', () => {
+      if (taskInput.value.trim() !== "") {
+        const div = document.createElement('div');
+        div.className = 'task';
+        div.textContent = taskInput.value;
+        makeDeletable(div);
+        tasks.appendChild(div);
+        taskInput.value = "";
+        saveBoard();
+      }
+    });
+
+    imgUpload.addEventListener("change", () => {
+      const file = imgUpload.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          makeDeletable(img);
+          tasks.appendChild(img);
+          saveBoard();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
