@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Personal Website</title>
+  <style>
+    body {
+      background-color: #ffccdc; /* light pink */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      animation: fadeIn 2s ease-in;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Oval rainbow name header */
+    #name-oval {
+      display: inline-block;
+      padding: 20px 60px;
+      margin: 20px auto;
+      border-radius: 50px;
+      background: #ff99bb;
+      color: white;
+      font-size: 2.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.5s ease;
+    }
+
+    header {
+      padding: 2rem;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 15px;
+      border-radius: 20px;
+      background-color: #ff99bb;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    nav a:hover {
+      background-color: #ff6699;
+      transform: scale(1.1);
+    }
+
+    section {
+      padding: 2rem;
+      animation: fadeIn 2s ease-in;
+    }
+
+    footer {
+      background: #ff99bb;
+      padding: 1rem;
+      color: white;
+    }
+
+    img {
+      border-radius: 50%;
+      width: 150px;
+      margin: 20px 0;
+    }
+
+    /* Bulletin Board Styles */
+    #board {
+      background: #fff3f7;
+      border: 3px dashed #ff6699;
+      border-radius: 20px;
+      padding: 20px;
+      margin: 2rem auto;
+      width: 80%;
+      max-width: 600px;
+      min-height: 200px;
+    }
+    #board h3 {
+      margin-top: 0;
+      color: #ff6699;
+    }
+    #taskInput {
+      padding: 10px;
+      width: 60%;
+      border-radius: 10px;
+      border: 2px solid #ff99bb;
+      margin-right: 10px;
+    }
+    #addBtn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff99bb;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    #addBtn:hover {
+      background-color: #ff6699;
+      transform: scale(1.1);
+    }
+    .task {
+      background: #ffe6ef;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="name-oval">Hi, I’m [Your Name]!</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+      <a href="#board">Bulletin Board</a>
+    </nav>
+  </header>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <img src="profile.jpg" alt="Your profile picture">
+    <p>Hello! I’m [Your Name]. Welcome to my personal website. I love [your hobbies, interests, or career goals].</p>
+  </section>
+
+  <section id="projects">
+    <h2>My Projects</h2>
+    <ul>
+      <li>✨ Project 1 – A short description.</li>
+      <li>🌸 Project 2 – A short description.</li>
+      <li>🚀 Project 3 – A short description.</li>
+    </ul>
+  </section>
+
+  <!-- Bulletin Board Section -->
+  <section id="board">
+    <h3>📌 My Bulletin Board</h3>
+    <input type="text" id="taskInput" placeholder="Add a task or note...">
+    <button id="addBtn">Add</button>
+    <div id="tasks"></div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>📧 Email: <a href="mailto:your@email.com">your@email.com</a></p>
+    <p>🔗 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
+  </section>
+
+  <footer>
+    <p>© 2025 [Your Name] | Made with 💖</p>
+  </footer>
+
+  <script>
+    // Rainbow oval name click effect
+    const nameOval = document.getElementById('name-oval');
+    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3"];
+    let colorIndex = 0;
+    nameOval.addEventListener("click", () => {
+      nameOval.style.background = colors[colorIndex];
+      colorIndex = (colorIndex + 1) % colors.length;
+    });
+
+    // Bulletin board tasks
+    const addBtn = document.getElementById('addBtn');
+    const taskInput = document.getElementById('taskInput');
+    const tasks = document.getElementById('tasks');
+
+    addBtn.addEventListener('click', () => {
+      if (taskInput.value.trim() !== "") {
+        const div = document.createElement('div');
+        div.className = 'task';
+        div.textContent = taskInput.value;
+        tasks.appendChild(div);
+        taskInput.value = "";
+      }
+    });
+  </script>
+</body>
+</html>
