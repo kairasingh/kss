@@ -1,245 +1,705 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kaira's Personal Website</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kaira's Tower of Hell — Pink Obby</title>
   <style>
-    body {
-      background: linear-gradient(#ffd6e8, #ffccdc);
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      animation: fadeIn 2s ease-in;
+    :root{
+      --pink-1:#ffccdc;
+      --pink-2:#ff99bb;
+      --accent:#ff6699;
+      --white:#fff;
+      --board:#fff3f7;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      background: linear-gradient(180deg,var(--pink-1),#ffd6e8);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:#333;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    /* Layout */
+    .wrap{
+      max-width:1100px;
+      margin:20px auto;
+      padding:16px;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+    }
+    .title {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .oval {
+      background:var(--pink-2);
+      color:white;
+      padding:12px 22px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:20px;
+    }
+    .controls-info{
+      text-align:right;
+      font-size:14px;
     }
 
-    /* 🌈 Oval rainbow name header */
-    #name-oval {
-      display: inline-block;
-      padding: 20px 60px;
-      margin: 20px auto;
-      border-radius: 50px;
-      background: #ff99bb;
-      color: white;
-      font-size: 2.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.5s ease;
+    /* Board / Game Area */
+    #game-area{
+      background:var(--board);
+      border:5px solid var(--pink-2);
+      border-radius:14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      overflow:hidden;
+      position:relative;
+      height:720px;
     }
 
-    header { padding: 2rem; }
-    nav a {
-      margin: 0 15px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 20px;
-      background-color: #ff99bb;
-      transition: background-color 0.3s ease, transform 0.2s ease;
+    /* top HUD */
+    .hud{
+      display:flex;
+      justify-content:space-between;
+      padding:10px 14px;
+      align-items:center;
     }
-    nav a:hover {
-      background-color: #ff6699;
-      transform: scale(1.1);
+    .hud .left, .hud .center, .hud .right{display:flex;align-items:center;gap:12px}
+    .badge{
+      background:var(--white);
+      padding:6px 10px;
+      border-radius:10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      font-weight:600;
+      color:var(--accent);
     }
-
-    section { padding: 2rem; animation: fadeIn 2s ease-in; }
-
-    footer { background: #ff99bb; padding: 1rem; color: white; }
-
-    img { border-radius: 10px; max-width: 100%; margin: 10px 0; }
-
-    /* 🎀 Whiteboard effect */
-    #whiteboard {
-      background: #fff;
-      border: 5px solid #ff99bb;
-      border-radius: 25px;
-      box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
-      margin: 2rem auto;
-      padding: 2rem;
-      width: 85%;
-      max-width: 900px;
+    .small{
+      font-size:13px;color:#666;font-weight:500;
     }
 
-    /* 📌 Bulletin Board Styles */
-    #board {
-      background: #fff3f7;
-      border: 3px dashed #ff6699;
-      border-radius: 20px;
-      padding: 20px;
-      margin: 2rem auto;
-      width: 80%;
-      max-width: 600px;
-      min-height: 200px;
+    /* Canvas fills area below hud */
+    #canvas-wrap{
+      width:100%;
+      height:calc(100% - 64px);
+      display:flex;
+      justify-content:center;
+      align-items:center;
     }
-    #board h3 { margin-top: 0; color: #ff6699; }
-    #taskInput {
-      padding: 10px;
-      width: 50%;
-      border-radius: 10px;
-      border: 2px solid #ff99bb;
-      margin-right: 10px;
+    canvas{
+      background:linear-gradient(180deg,#fefefe,#fffafc);
+      border-radius:10px;
+      max-width:100%;
+      max-height:100%;
+      width:720px;
+      height:640px;
+      box-shadow: inset 0 -20px 60px rgba(0,0,0,0.04);
+      touch-action:none;
     }
-    #addBtn, #imgUploadLabel {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 10px;
-      background-color: #ff99bb;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
+
+    /* Bottom Info / Buttons */
+    .bottom-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:12px;
+      gap:12px;
     }
-    #addBtn:hover, #imgUploadLabel:hover {
-      background-color: #ff6699;
-      transform: scale(1.1);
+    .btn{
+      background:var(--pink-2);
+      color:white;
+      border:none;
+      padding:10px 14px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
     }
-    .task {
-      background: #ffe6ef;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: left;
+    .btn.secondary{background:var(--white); color:var(--accent); border:2px solid rgba(255,102,153,0.15)}
+    .btn:active{transform:translateY(1px);}
+
+    /* Mobile touch controls */
+    .touch-controls{
+      display:none;
+      position:absolute;
+      left:12px;
+      bottom:12px;
+      gap:12px;
     }
-    #imgUpload { display: none; }
+    .touch-btn{
+      width:60px;height:60px;border-radius:12px;background:var(--pink-2);color:white;border:none;font-size:18px;
+      display:flex;align-items:center;justify-content:center;box-shadow:0 6px 12px rgba(0,0,0,0.12);
+    }
+    .touch-jump{
+      position:absolute; right:12px; bottom:12px; width:64px; height:64px; border-radius:999px;
+    }
+
+    /* Avatar mini-customization box */
+    .avatar-box{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .avatar-preview{
+      width:46px;height:46px;border-radius:12px;background:#fff;border:3px solid var(--pink-2);display:flex;align-items:center;justify-content:center;font-weight:700;
+    }
+    .avatar-controls select{
+      padding:6px 8px;border-radius:8px;border:1px solid #ffd6e8;background:#fff;
+    }
+
+    /* Responsive */
+    @media (max-width:820px){
+      canvas{ width:92vw; height:82vh; }
+      .touch-controls{ display:flex; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div id="name-oval" contenteditable="true">Hi, I’m Kaira!</div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-      <a href="#board">Bulletin Board</a>
-    </nav>
-  </header>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <div class="oval" id="nameOval" contenteditable="true">Hi, I’m Kaira!</div>
+        <div>
+          <div style="font-weight:700">Kaira's Pink Tower</div>
+          <div style="font-size:13px;color:#666">Tower of Hell inspired obby — single player</div>
+        </div>
+      </div>
 
-  <!-- 🎀 Whiteboard Content Area -->
-  <div id="whiteboard">
-    <section id="about">
-      <h2>About Me</h2>
-      <img src="profile.jpg" alt="Kaira's profile picture">
-      <p id="about-text" contenteditable="true">
-        Hello! I’m Kaira. Welcome to my personal website. I love [your hobbies, interests, or career goals].
-      </p>
-    </section>
+      <div class="controls-info">
+        <div style="font-weight:700">Controls</div>
+        <div class="small">← A / → D to move • Space to jump • Hold to drop</div>
+      </div>
+    </header>
 
-    <section id="projects">
-      <h2>My Projects</h2>
-      <ul>
-        <li>✨ Project 1 – A short description.</li>
-        <li>🌸 Project 2 – A short description.</li>
-        <li>🚀 Project 3 – A short description.</li>
-      </ul>
-    </section>
+    <div id="game-area">
+      <div class="hud">
+        <div class="left">
+          <div class="badge" id="levelBadge">Level 1</div>
+          <div class="small">Deaths: <span id="deathCount">0</span></div>
+        </div>
+        <div class="center">
+          <div class="small">Time: <span id="timeDisplay">0.00s</span></div>
+          <div class="small">Best: <span id="bestTime">—</span></div>
+        </div>
+        <div class="right avatar-box">
+          <div class="avatar-preview" id="avatarPreview">K</div>
+          <div class="avatar-controls">
+            <label class="small">Color
+              <select id="avatarColor">
+                <option value="#ff99bb">Pink</option>
+                <option value="#ffd166">Yellow</option>
+                <option value="#89d4d3">Teal</option>
+                <option value="#b7a3ff">Lavender</option>
+              </select>
+            </label>
+            <label class="small">Head
+              <select id="avatarHead">
+                <option value="circle">Round</option>
+                <option value="square">Square</option>
+                <option value="heart">Heart</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
 
-    <!-- 📌 Bulletin Board -->
-    <section id="board">
-      <h3>📌 My Bulletin Board</h3>
-      <input type="text" id="taskInput" placeholder="Add a task or note...">
-      <button id="addBtn">Add Task</button>
-      <label for="imgUpload" id="imgUploadLabel">Add Picture</label>
-      <input type="file" id="imgUpload" accept="image/*">
-      <div id="tasks"></div>
-    </section>
+      <div id="canvas-wrap">
+        <canvas id="gameCanvas" width="720" height="640"></canvas>
 
-    <section id="contact">
-      <h2>Contact</h2>
-      <p>📧 Email: <a href="mailto:your@email.com">your@email.com</a></p>
-      <p>🔗 GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a></p>
-    </section>
+        <!-- Mobile touch controls -->
+        <div class="touch-controls" id="touchControls" aria-hidden="true">
+          <button class="touch-btn" id="leftBtn">◀</button>
+          <button class="touch-btn" id="rightBtn">▶</button>
+        </div>
+        <button class="touch-btn touch-jump" id="jumpBtn" style="display:none;">⬆</button>
+      </div>
+    </div>
+
+    <div class="bottom-row" style="margin-top:12px;">
+      <div>
+        <button class="btn" id="startBtn">Start Run</button>
+        <button class="btn secondary" id="resetBtn">Reset Best</button>
+      </div>
+      <div style="font-size:13px;color:#666">Tip: each run randomly generates a taller/more tricky tower — how fast can you climb?</div>
+    </div>
   </div>
 
-  <footer>
-    <p>© 2025 Kaira | Made with 💖</p>
-  </footer>
-
   <script>
-    // 🌈 Rainbow name cycle
-    const nameOval = document.getElementById('name-oval');
-    const colors = ["#ff0000","#ff7f00","#ffff00","#00ff00","#0000ff","#4b0082","#9400d3","#ff99bb"];
-    let colorIndex = 0;
-    nameOval.addEventListener("click", () => {
-      nameOval.style.background = colors[colorIndex];
-      colorIndex = (colorIndex + 1) % colors.length;
-    });
-    nameOval.addEventListener("input", () => {
-      localStorage.setItem("savedName", nameOval.innerText);
-    });
+  /************************************************************************
+   * Tower of Hell - simplified 2D obby
+   * Single-file HTML/JS. No external libs.
+   *
+   * Features:
+   * - pink aesthetic
+   * - procedurally generated vertical tower with multiple levels
+   * - player physics: left/right, jump, gravity
+   * - falls -> respawn at last checkpoint (bottom)
+   * - timer + best time (localStorage)
+   * - death counter
+   * - simple avatar customization (color & head shape)
+   * - keyboard + touch controls
+   ************************************************************************/
 
-    // Save About text
-    const aboutText = document.getElementById('about-text');
-    aboutText.addEventListener("input", () => {
-      localStorage.setItem("savedAbout", aboutText.innerText);
-    });
+  (function(){
+    // Canvas and context
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    // Load saved content
-    window.addEventListener("load", () => {
-      const savedName = localStorage.getItem("savedName");
-      if (savedName) nameOval.innerText = savedName;
-      const savedAbout = localStorage.getItem("savedAbout");
-      if (savedAbout) aboutText.innerText = savedAbout;
-      const savedBoard = localStorage.getItem("bulletinBoard");
-      if (savedBoard) {
-        tasks.innerHTML = savedBoard;
-        Array.from(tasks.children).forEach(makeDeletable);
+    // HUD elements
+    const timeDisplay = document.getElementById('timeDisplay');
+    const bestTimeEl = document.getElementById('bestTime');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const deathCountEl = document.getElementById('deathCount');
+    const levelBadge = document.getElementById('levelBadge');
+
+    // Avatar controls
+    const avatarColor = document.getElementById('avatarColor');
+    const avatarHead = document.getElementById('avatarHead');
+    const avatarPreview = document.getElementById('avatarPreview');
+    const nameOval = document.getElementById('nameOval');
+
+    // Touch controls
+    const leftBtn = document.getElementById('leftBtn');
+    const rightBtn = document.getElementById('rightBtn');
+    const jumpBtn = document.getElementById('jumpBtn');
+    const touchControls = document.getElementById('touchControls');
+
+    // game state
+    let running = false;
+    let startTime = 0;
+    let elapsed = 0;
+    let bestTime = localStorage.getItem('kaira_best_time') ? Number(localStorage.getItem('kaira_best_time')) : null;
+    let deathCount = localStorage.getItem('kaira_deaths') ? Number(localStorage.getItem('kaira_deaths')) : 0;
+    let levelNumber = 1;
+
+    if(bestTime) bestTimeEl.textContent = bestTime.toFixed(2) + 's';
+    deathCountEl.textContent = deathCount;
+
+    // Physics constants
+    const GRAVITY = 0.9;
+    const FRICTION = 0.98;
+    const PLAYER_SPEED = 3.2;
+    const JUMP_FORCE = 13;
+    const CANVAS_W = canvas.width;
+    const CANVAS_H = canvas.height;
+
+    // Player object
+    const player = {
+      x: CANVAS_W/2 - 16,
+      y: CANVAS_H - 80,
+      w: 36,
+      h: 48,
+      vx: 0,
+      vy: 0,
+      onGround: false,
+      color: avatarColor.value,
+      headShape: avatarHead.value
+    };
+
+    // Platforms and tower
+    let platforms = [];
+    const PLATFORM_MIN_W = 60;
+    const PLATFORM_MAX_W = 220;
+    const PLATFORM_GAP = 80; // vertical gap between platform "rows" (approx)
+    const TOWER_HEIGHT = 2500; // vertical size in px (approx)
+    let cameraY = 0;
+    let finishY = -TOWER_HEIGHT;
+    let checkpointY = CANVAS_H - 100;
+
+    // Controls state
+    const keys = {left:false, right:false, jump:false, down:false};
+    let touchLeft = false, touchRight = false, touchJump = false;
+
+    // Utility random
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+    function randInt(min,max){ return Math.floor(rand(min,max+1)); }
+
+    // --- GENERATE TOWER ---
+    function generateTower(seedLevel=1){
+      platforms = [];
+      const rows = Math.floor(TOWER_HEIGHT / PLATFORM_GAP);
+      let y = CANVAS_H; // start at bottom coordinate
+      let direction = 1;
+      for(let i=0;i<rows;i++){
+        const rowYOffset = -i*PLATFORM_GAP;
+        // create several platforms per row, sometimes moving gaps
+        const count = randInt(1,3);
+        for(let j=0;j<count;j++){
+          const pw = randInt(PLATFORM_MIN_W, PLATFORM_MAX_W);
+          const px = randInt(20, CANVAS_W - pw - 20);
+          const py = y + rowYOffset + rand(-12,12);
+          platforms.push({
+            x:px,
+            y:py,
+            w:pw,
+            h:16,
+            type: 'static', // could extend with moving platforms later
+            color: (Math.random()>0.85)? '#ffd6e8' : '#ffe6ef', // occasional brighter
+            id: platforms.length
+          });
+        }
       }
-    });
 
-    // 📌 Bulletin board
-    const addBtn = document.getElementById('addBtn');
-    const taskInput = document.getElementById('taskInput');
-    const tasks = document.getElementById('tasks');
-    const imgUpload = document.getElementById('imgUpload');
+      // add some tricky floating tiny platforms and spikes
+      for(let k=0;k<Math.floor(rows*0.2);k++){
+        const pw = randInt(24,80);
+        const px = randInt(20, CANVAS_W - pw - 20);
+        const py = CANVAS_H - randInt(150, TOWER_HEIGHT-100);
+        platforms.push({x:px,y:py,w:pw,h:14,type:'tiny',color:'#ffdceb',id:platforms.length});
+      }
 
-    function saveBoard() { localStorage.setItem("bulletinBoard", tasks.innerHTML); }
+      // ensure a clear finish platform at the top
+      const finishPlatform = {x:CANVAS_W/2 - 70, y: CANVAS_H - TOWER_HEIGHT - 70, w:140, h:18, type:'finish', color:'#fff1f6', id:platforms.length};
+      platforms.push(finishPlatform);
 
-    function makeDeletable(el) {
-      let holdTimer;
-      el.addEventListener("mousedown", () => {
-        holdTimer = setTimeout(() => { el.remove(); saveBoard(); }, 5000);
-      });
-      el.addEventListener("mouseup", () => clearTimeout(holdTimer));
-      el.addEventListener("mouseleave", () => clearTimeout(holdTimer));
-      el.addEventListener("touchstart", () => {
-        holdTimer = setTimeout(() => { el.remove(); saveBoard(); }, 5000);
-      });
-      el.addEventListener("touchend", () => clearTimeout(holdTimer));
+      // sort descending by y (so we draw top-first if needed)
+      platforms.sort((a,b)=>a.y-b.y);
+      finishY = finishPlatform.y - 30;
     }
 
-    addBtn.addEventListener('click', () => {
-      if (taskInput.value.trim() !== "") {
-        const div = document.createElement('div');
-        div.className = 'task';
-        div.textContent = taskInput.value;
-        makeDeletable(div);
-        tasks.appendChild(div);
-        taskInput.value = "";
-        saveBoard();
+    // --- COLLISION HELPERS ---
+    function aabbIntersect(ax,ay,aw,ah, bx,by,bw,bh){
+      return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by;
+    }
+
+    // --- RESET / START / RESPAWN ---
+    function resetPlayer(){
+      player.x = CANVAS_W/2 - player.w/2;
+      player.y = CANVAS_H - 96;
+      player.vx = 0;
+      player.vy = 0;
+      cameraY = 0;
+    }
+
+    function startRun(){
+      generateTower(levelNumber);
+      resetPlayer();
+      startTime = performance.now();
+      running = true;
+      elapsed = 0;
+      deathCount = 0;
+      deathCountEl.textContent = deathCount;
+      levelBadge.textContent = 'Level ' + levelNumber;
+    }
+
+    function finishRun(){
+      running = false;
+      const total = elapsed/1000;
+      if(!bestTime || total < bestTime){
+        bestTime = total;
+        localStorage.setItem('kaira_best_time', bestTime);
+        bestTimeEl.textContent = bestTime.toFixed(2) + 's';
+        alert('New best time! ' + bestTime.toFixed(2) + 's 🎉');
+      } else {
+        alert('You finished in ' + total.toFixed(2) + 's');
+      }
+      levelNumber++;
+      // keep run data, but you can auto-start next time or press Start
+    }
+
+    // --- GAME LOOP ---
+    let lastFrame = performance.now();
+    function loop(now){
+      const dt = now - lastFrame;
+      lastFrame = now;
+
+      if(running){
+        elapsed = now - startTime;
+        timeDisplay.textContent = (elapsed/1000).toFixed(2) + 's';
+      }
+
+      updatePhysics(dt/16.67);
+      render();
+
+      requestAnimationFrame(loop);
+    }
+
+    // --- PHYSICS UPDATE ---
+    function updatePhysics(delta){
+      // horizontal input
+      let move = 0;
+      if(keys.left || touchLeft) move -= 1;
+      if(keys.right || touchRight) move += 1;
+      player.vx += move * PLAYER_SPEED * 0.4;
+      player.vx *= FRICTION;
+
+      // jump
+      if((keys.jump || touchJump) && player.onGround){
+        player.vy = -JUMP_FORCE;
+        player.onGround = false;
+      }
+
+      // gravity
+      player.vy += GRAVITY;
+      // small terminal velocity
+      if(player.vy > 30) player.vy = 30;
+
+      // apply velocities
+      player.x += player.vx;
+      player.y += player.vy;
+
+      // wrap edges horizontally
+      if(player.x < -player.w) player.x = CANVAS_W;
+      if(player.x > CANVAS_W) player.x = -player.w;
+
+      // collisions with platforms
+      player.onGround = false;
+      for(let p of platforms){
+        // simple AABB collision handling only from top
+        if(player.vy >= 0){ // only test when moving downward (land)
+          if(aabbIntersect(player.x, player.y + player.vy, player.w, player.h, p.x, p.y, p.w, p.h)){
+            // landed on platform
+            player.y = p.y - player.h;
+            player.vy = 0;
+            player.onGround = true;
+            // if it's a finish platform
+            if(p.type === 'finish'){
+              // reached top
+              running && finishRun();
+            }
+          }
+        }
+      }
+
+      // falling below bottom (death)
+      if(player.y > CANVAS_H + 200){
+        deathCount++;
+        localStorage.setItem('kaira_deaths', deathCount);
+        deathCountEl.textContent = deathCount;
+        // respawn at bottom
+        resetPlayer();
+      }
+
+      // camera follows player (keep player vertically centered-ish)
+      const targetCam = player.y - CANVAS_H/2 + 120;
+      cameraY += (targetCam - cameraY) * 0.12;
+      if(cameraY < finishY - 50) cameraY = finishY - 50; // clamp top
+      if(cameraY > CANVAS_H / 2) cameraY = CANVAS_H / 2;
+    }
+
+    // --- RENDER ---
+    function render(){
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+
+      // draw background vertical gradient of tower
+      const grad = ctx.createLinearGradient(0,0,0,canvas.height);
+      grad.addColorStop(0, '#fffafc');
+      grad.addColorStop(1, '#fff3f7');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+
+      // save and translate to camera
+      ctx.save();
+      ctx.translate(0, -cameraY);
+
+      // draw platforms
+      for(let p of platforms){
+        // only draw if visible in canvas range
+        if(p.y > cameraY - 200 && p.y < cameraY + canvas.height + 200){
+          ctx.fillStyle = p.color || '#ffe6ef';
+          roundRect(ctx, p.x, p.y, p.w, p.h, 6, true, false);
+          // small accent line
+          ctx.fillStyle = 'rgba(255,102,153,0.12)';
+          ctx.fillRect(p.x+6, p.y+2, Math.max(4, p.w-12), 3);
+          // finish label
+          if(p.type === 'finish'){
+            ctx.fillStyle = '#ff6699';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText('FINISH', p.x + p.w/2 - 26, p.y - 6);
+          }
+        }
+      }
+
+      // draw tower top marker
+      ctx.fillStyle = 'rgba(255,102,153,0.06)';
+      ctx.fillRect(0, finishY - 120, canvas.width, 100);
+
+      // draw player (simple avatar)
+      drawAvatar(ctx, player.x, player.y, player.w, player.h, player.color, player.headShape);
+
+      ctx.restore();
+    }
+
+    // helper: rounded rect
+    function roundRect(c,x,y,w,h,r,fill,stroke){
+      if(typeof r === 'undefined') r = 5;
+      c.beginPath();
+      c.moveTo(x+r,y);
+      c.arcTo(x+w,y,x+w,y+h,r);
+      c.arcTo(x+w,y+h,x,y+h,r);
+      c.arcTo(x,y+h,x,y,r);
+      c.arcTo(x,y,x+w,y,r);
+      c.closePath();
+      if(fill) c.fill();
+      if(stroke) c.stroke();
+    }
+
+    // draw avatar body + head shape
+    function drawAvatar(c,x,y,w,h,color,headShape){
+      // body
+      c.fillStyle = color;
+      roundRect(c, x + 6, y + Math.floor(h*0.35), w - 12, Math.floor(h*0.6), 8, true, false);
+
+      // head area
+      const hx = x + w/2;
+      const hy = y + Math.floor(h*0.22);
+      const headSize = Math.min(44, Math.floor(h*0.5));
+
+      c.fillStyle = color;
+      c.beginPath();
+      if(headShape === 'circle'){
+        c.arc(hx, hy, headSize/2, 0, Math.PI*2);
+        c.fill();
+      } else if(headShape === 'square'){
+        roundRect(c, hx - headSize/2, hy - headSize/2, headSize, headSize, 8, true, false);
+      } else if(headShape === 'heart'){
+        // simple heart shape using bezier
+        c.save();
+        c.translate(hx, hy);
+        c.scale(0.9,0.9);
+        c.beginPath();
+        c.moveTo(0, -10);
+        c.bezierCurveTo(12, -34, 54, -10, 0, 28);
+        c.bezierCurveTo(-54, -10, -12, -34, 0, -10);
+        c.closePath();
+        c.fill();
+        c.restore();
+      }
+
+      // face: eyes
+      c.fillStyle = '#000';
+      c.beginPath();
+      c.arc(hx - 8, hy - 2, 3, 0, Math.PI*2);
+      c.arc(hx + 8, hy - 2, 3, 0, Math.PI*2);
+      c.fill();
+    }
+
+    // --- INPUT HANDLERS ---
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
+      if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+      if(e.key === ' ' || e.key === 'Spacebar') keys.jump = true;
+      if(e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') keys.down = true;
+    });
+    window.addEventListener('keyup', (e)=>{
+      if(e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+      if(e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+      if(e.key === ' ' || e.key === 'Spacebar') keys.jump = false;
+      if(e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') keys.down = false;
+    });
+
+    // Touch buttons
+    leftBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); touchLeft = true;});
+    leftBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); touchLeft = false;});
+    rightBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); touchRight = true;});
+    rightBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); touchRight = false;});
+    jumpBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); touchJump = true;});
+    jumpBtn.addEventListener('touchend', (e)=>{ e.preventDefault(); touchJump = false;});
+
+    // Mouse-based touch support (for desktop small screens)
+    leftBtn.addEventListener('mousedown', ()=>{ touchLeft = true; });
+    leftBtn.addEventListener('mouseup', ()=>{ touchLeft = false; });
+    rightBtn.addEventListener('mousedown', ()=>{ touchRight = true; });
+    rightBtn.addEventListener('mouseup', ()=>{ touchRight = false; });
+    jumpBtn.addEventListener('mousedown', ()=>{ touchJump = true; });
+    jumpBtn.addEventListener('mouseup', ()=>{ touchJump = false; });
+
+    // Make touch controls visible on small screens
+    function updateTouchVisibility(){
+      if(window.innerWidth < 820){
+        touchControls.style.display = 'flex';
+        jumpBtn.style.display = 'block';
+      } else {
+        touchControls.style.display = 'none';
+        jumpBtn.style.display = 'none';
+      }
+    }
+    window.addEventListener('resize', updateTouchVisibility);
+    updateTouchVisibility();
+
+    // Avatar customization (link avatar controls to player color/head)
+    avatarColor.addEventListener('change', ()=>{
+      player.color = avatarColor.value;
+      avatarPreview.style.background = avatarColor.value;
+      avatarPreview.textContent = nameOval.innerText.trim().charAt(0) || 'K';
+    });
+    avatarHead.addEventListener('change', ()=>{
+      player.headShape = avatarHead.value;
+      // reflect shape text
+      if(avatarHead.value === 'circle') avatarPreview.textContent = '●';
+      else if(avatarHead.value === 'square') avatarPreview.textContent = '■';
+      else avatarPreview.textContent = '♥';
+    });
+
+    nameOval.addEventListener('input', ()=>{
+      avatarPreview.textContent = nameOval.innerText.trim().charAt(0) || 'K';
+      localStorage.setItem('kaira_name', nameOval.innerText);
+    });
+
+    // load saved name
+    if(localStorage.getItem('kaira_name')){
+      nameOval.innerText = localStorage.getItem('kaira_name');
+      avatarPreview.textContent = nameOval.innerText.trim().charAt(0) || 'K';
+    } else {
+      avatarPreview.textContent = 'K';
+    }
+    // initial avatar preview
+    avatarPreview.style.background = avatarColor.value;
+    if(avatarHead.value === 'circle') avatarPreview.textContent = '●';
+
+    // START / RESET handlers
+    startBtn.addEventListener('click', ()=>{
+      // start a fresh run from level 1 (resets level)
+      levelNumber = 1;
+      startRun();
+    });
+
+    resetBtn.addEventListener('click', ()=>{
+      if(confirm('Reset best time and deaths?')){
+        localStorage.removeItem('kaira_best_time');
+        localStorage.removeItem('kaira_deaths');
+        bestTime = null;
+        deathCount = 0;
+        deathCountEl.textContent = deathCount;
+        bestTimeEl.textContent = '—';
+        alert('Cleared!');
       }
     });
 
-    imgUpload.addEventListener("change", () => {
-      const file = imgUpload.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          makeDeletable(img);
-          tasks.appendChild(img);
-          saveBoard();
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+    // Initialize
+    generateTower(levelNumber);
+    resetPlayer();
+    // draw initial scene
+    drawInitial();
+
+    // Run loop
+    requestAnimationFrame(loop);
+
+    // helper do initial render while not running
+    function drawInitial(){
+      render();
+      ctx.save();
+      // overlay text
+      ctx.fillStyle = 'rgba(255,102,153,0.06)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#ff6699';
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText('Press "Start Run" to begin your Tower climb!', 40, 46);
+      ctx.restore();
+    }
+
+    // small helper random
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    // done
+  })();
   </script>
 </body>
 </html>
